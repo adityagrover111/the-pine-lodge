@@ -1,0 +1,13 @@
+import styled from "styled-components";
+
+function SideBar() {
+  const StyledSidebar = styled.aside`
+    background-color: var(--color-grey-0);
+    padding: 3.2rem 2.4rem;
+    border-right: 1px solid var(--color-grey100);
+    grid-row: 1/-1;
+  `;
+  return <StyledSidebar>SideBar</StyledSidebar>;
+}
+
+export default SideBar;
