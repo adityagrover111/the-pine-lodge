@@ -1,22 +1,49 @@
 import styled from "styled-components";
 import { formatCurrency } from "../../utils/helpers";
-import { deleteCabin } from "../../services/apiCabins";
-
-import { useState } from "react";
 import CreateCabinForm from "./CreateCabinForm";
 import { useDeleteCabin } from "./useDeleteCabin";
-import { HiPencil, HiSquare2Stack, HiTrash } from "react-icons/hi2";
+import { HiSquare2Stack, HiPencil, HiTrash } from "react-icons/hi2";
 import { useCreateCabin } from "./useCreateCabin";
+import Modal from "../../ui/Modal";
+import ConfirmDelete from "../../ui/ConfirmDelete";
+import Table from "../../ui/Table";
 
-const TableRow = styled.div`
-  display: grid;
-  grid-template-columns: 0.6fr 1.8fr 2.2fr 1fr 1fr 1fr;
-  column-gap: 2.4rem;
+// const TableRow = styled.div`
+//   display: grid;
+//   grid-template-columns: 0.6fr 1.8fr 2.2fr 1fr 1fr 1fr;
+//   column-gap: 2.4rem;
+//   align-items: center;
+//   padding: 1.4rem 2.4rem;
+
+//   &:not(:last-child) {
+//     border-bottom: 1px solid var(--color-grey-100);
+//   }
+// `;
+const ActionGroup = styled.div`
+  display: flex;
+  gap: 0.8rem;
+`;
+
+const IconButton = styled.button`
+  background: none;
+  border: none;
+
+  padding: 0.4rem;
+  border-radius: var(--border-radius-sm);
+  transition: background-color 0.2s;
+
+  display: flex;
   align-items: center;
-  padding: 1.4rem 2.4rem;
+  justify-content: center;
 
-  &:not(:last-child) {
-    border-bottom: 1px solid var(--color-grey-100);
+  &:hover {
+    background-color: var(--color-grey-100);
+  }
+
+  & svg {
+    width: 2rem;
+    height: 2rem;
+    color: var(--color-grey-600);
   }
 `;
 
@@ -48,55 +75,75 @@ const Discount = styled.div`
 `;
 
 function CabinRow({ cabin }) {
-  const [showForm, setShowForm] = useState(false);
+  const { isDeleting, deleteCabin } = useDeleteCabin();
   const { isCreating, createCabin } = useCreateCabin();
+
   const {
-    id: cabinID,
+    id: cabinId,
     name,
     maxCapacity,
-    image,
-    discount,
     regularPrice,
+    discount,
+    image,
     description,
   } = cabin;
-  function handleDuplication() {
+
+  function handleDuplicate() {
     createCabin({
       name: `Copy of ${name}`,
       maxCapacity,
-      image,
-      discount,
       regularPrice,
+      discount,
+      image,
+      description,
     });
   }
 
-  const { isDeleting, deleteCabin } = useDeleteCabin();
   return (
-    <>
-      <TableRow role="row">
-        <Img src={image} />
-        <Cabin>{name}</Cabin>
-        <div>Fits up to {maxCapacity}</div>
-        <Price>{formatCurrency(regularPrice)}</Price>
-        <Price>{formatCurrency(discount)}</Price>
-        <div>
-          <button onClick={handleDuplication} disabled={isCreating}>
+    <Table.Row>
+      <Img src={image} />
+      <Cabin>{name}</Cabin>
+      <div>Fits up to {maxCapacity}</div>
+      <Price>{formatCurrency(regularPrice)}</Price>
+      {discount ? (
+        <Discount>{formatCurrency(discount)}</Discount>
+      ) : (
+        <span>&mdash;</span>
+      )}
+      <div>
+        <ActionGroup>
+          <IconButton disabled={isCreating} onClick={handleDuplicate}>
             <HiSquare2Stack />
-          </button>
-          <button onClick={() => setShowForm((show) => !show)}>
-            <HiPencil />
-          </button>
-          <button
-            onClick={() => {
-              deleteCabin(cabinID);
-            }}
-            disabled={isDeleting}
-          >
-            <HiTrash />
-          </button>
-        </div>
-      </TableRow>
-      {showForm && <CreateCabinForm cabinToEdit={cabin} />}
-    </>
+          </IconButton>
+
+          <Modal>
+            <Modal.Open opens="edit">
+              <IconButton>
+                <HiPencil />
+              </IconButton>
+            </Modal.Open>
+            <Modal.Window name="edit">
+              <CreateCabinForm cabinToEdit={cabin} />
+            </Modal.Window>
+
+            <Modal.Open opens="delete">
+              <IconButton>
+                <HiTrash />
+              </IconButton>
+            </Modal.Open>
+
+            <Modal.Window name="delete">
+              <ConfirmDelete
+                resourceName="cabins"
+                disabled={isDeleting}
+                onConfirm={() => deleteCabin(cabinId)}
+              />
+            </Modal.Window>
+          </Modal>
+        </ActionGroup>
+      </div>
+    </Table.Row>
   );
 }
+
 export default CabinRow;

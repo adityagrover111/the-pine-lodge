@@ -45,7 +45,7 @@ const Error = styled.span`
   color: var(--color-red-700);
 `;
 
-function CreateCabinForm({ cabinToEdit = {} }) {
+function CreateCabinForm({ cabinToEdit = {}, onClose }) {
   const { id: editID, ...editValues } = cabinToEdit;
   const isEditSession = Boolean(editID);
   const { register, handleSubmit, reset, getValues, formState } = useForm({
@@ -71,15 +71,31 @@ function CreateCabinForm({ cabinToEdit = {} }) {
     const newCabinData = { ...data, image };
 
     if (isEditSession) {
-      editCabin({ newCabinData, id: editID }, { onSuccess: () => reset() });
+      editCabin(
+        { newCabinData, id: editID },
+        {
+          onSuccess: () => {
+            reset();
+            onClose?.();
+          },
+        }
+      );
     } else {
-      createCabin(newCabinData, { onSuccess: () => reset() });
+      createCabin(newCabinData, {
+        onSuccess: () => {
+          reset();
+          onClose?.();
+        },
+      });
     }
   }
 
   function onError(error) {}
   return (
-    <Form onSubmit={handleSubmit(onSubmit, onError)}>
+    <Form
+      onSubmit={handleSubmit(onSubmit, onError)}
+      type={onClose ? "modal" : "regular"}
+    >
       <FormRow>
         <Label htmlFor="name">Cabin name</Label>
         <Input
@@ -164,7 +180,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
 
       <FormRow>
         {/* type is an HTML attribute! */}
-        <Button variation="secondary" type="reset">
+        <Button onClick={() => onClose?.()} variation="secondary" type="reset">
           Cancel
         </Button>
         <Button disabled={isWorking}>Add Cabin</Button>
