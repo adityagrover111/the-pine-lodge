@@ -9,6 +9,7 @@ import { useSearchParams } from "react-router-dom";
 
 function CabinTable() {
   const { isLoading, cabins } = useCabins();
+
   const [searchParams] = useSearchParams();
   const filterValue = searchParams.get("discount") || "all";
 
@@ -19,8 +20,8 @@ function CabinTable() {
   if (filterValue === "with-discount")
     filteredCabins = cabins?.filter((cabin) => cabin.discount > 0);
   if (isLoading) return <Spinner />;
+  if (cabins.length === 0) return <Empty resource="cabin" />;
   if (!cabins.length) return <Empty resourceName="cabins" />;
-  console.log(filteredCabins);
 
   const sortBy = searchParams.get("sortBy") || "name-asc";
   const [field, direction] = sortBy.split("-");
