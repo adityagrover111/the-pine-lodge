@@ -5,9 +5,10 @@ import Empty from "../../ui/Empty";
 import { useBookings } from "./useBookings";
 import Spinner from "../../ui/Spinner";
 import { useSearchParams } from "react-router-dom";
+import Pagination from "../../ui/Pagination";
 
 function BookingTable() {
-  const { bookings, isPending } = useBookings();
+  const { bookings, isPending, count } = useBookings();
 
   // const [searchParams] = useSearchParams();
   // const filterValue = searchParams.get("status") || "all";
@@ -45,6 +46,9 @@ function BookingTable() {
         data={bookings}
         render={(booking) => <BookingRow key={booking.id} booking={booking} />}
       />
+      <Table.Footer>
+        <Pagination count={count} />
+      </Table.Footer>
     </Table>
   );
 }
