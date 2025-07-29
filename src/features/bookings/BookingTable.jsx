@@ -4,30 +4,13 @@ import Menus from "../../ui/Menus";
 import Empty from "../../ui/Empty";
 import { useBookings } from "./useBookings";
 import Spinner from "../../ui/Spinner";
-import { useSearchParams } from "react-router-dom";
+
 import Pagination from "../../ui/Pagination";
 
 function BookingTable() {
-  const { bookings, isPending, count } = useBookings();
+  const { bookings, isLoading, count } = useBookings();
 
-  // const [searchParams] = useSearchParams();
-  // const filterValue = searchParams.get("status") || "all";
-
-  // let filteredBookings;
-  // if (filterValue === "all") filteredBookings = bookings;
-  // if (filterValue === "checked-in")
-  //   filteredBookings = bookings?.filter(
-  //     (booking) => booking.status === "checked-in"
-  //   );
-  // if (filterValue === "checked-out")
-  //   filteredBookings = bookings?.filter(
-  //     (booking) => booking.status === "checked-out"
-  //   );
-  // if (filterValue === "unconfirmed")
-  //   filteredBookings = bookings?.filter(
-  //     (booking) => booking.status === "unconfirmed"
-  //   );
-  if (isPending) return <Spinner />;
+  if (isLoading) return <Spinner />;
 
   if (!bookings?.length) return <Empty resource="booking" />;
 

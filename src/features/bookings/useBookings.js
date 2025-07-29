@@ -17,7 +17,7 @@ export function useBookings() {
   const sortBy = { field, direction };
   const page = !searchParams.get("page") ? 1 : Number(searchParams.get("page"));
   const {
-    isPending,
+    isLoading,
     data: { data: bookings, count } = {},
     error,
   } = useQuery({
@@ -39,5 +39,5 @@ export function useBookings() {
       queryFn: () => getBookings({ filter, sortBy, page: page - 1 }),
     });
   }
-  return { isPending, bookings, error, count };
+  return { isLoading, bookings, error, count };
 }

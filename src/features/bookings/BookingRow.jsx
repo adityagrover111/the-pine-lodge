@@ -6,6 +6,46 @@ import Table from "../../ui/Table";
 
 import { formatCurrency } from "../../utils/helpers";
 import { formatDistanceFromNow } from "../../utils/helpers";
+import {
+  HiArrowDownOnSquare,
+  HiArrowRightCircle,
+  HiArrowUpOnSquare,
+  HiEye,
+  HiOutlineTrash,
+} from "react-icons/hi2";
+import { useNavigate } from "react-router-dom";
+import { useCheckout } from "../check-in-out/useCheckout";
+import { useDeleteBooking } from "./useDeleteBooking";
+
+const ActionGroup = styled.div`
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  align-items: center;
+  margin-right: 1.5rem;
+`;
+const IconButton = styled.button`
+  background: none;
+  border: none;
+
+  padding: 0.4rem;
+  border-radius: var(--border-radius-sm);
+  transition: background-color 0.2s;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background-color: var(--color-grey-100);
+  }
+
+  & svg {
+    width: 2rem;
+    height: 2rem;
+    color: var(--color-grey-600);
+  }
+`;
 
 const Cabin = styled.div`
   font-size: 1.6rem;
@@ -53,7 +93,9 @@ function BookingRow({
     "checked-in": "green",
     "checked-out": "silver",
   };
-
+  const navigate = useNavigate();
+  const { checkout, isCheckingOut } = useCheckout();
+  const { isDeleting, deleteBooking } = useDeleteBooking();
   return (
     <Table.Row>
       <Cabin>{cabinName}</Cabin>
@@ -79,6 +121,39 @@ function BookingRow({
       <Tag type={statusToTagName[status]}>{status.replace("-", " ")}</Tag>
 
       <Amount>{formatCurrency(totalPrice)}</Amount>
+      <ActionGroup>
+        <IconButton
+          title="See Details"
+          onClick={() => navigate(`/bookings/${bookingId}`)}
+        >
+          <HiEye />
+        </IconButton>
+
+        {status === "unconfirmed" && (
+          <IconButton
+            title="Check In"
+            onClick={() => navigate(`/checkin/${bookingId}`)}
+          >
+            <HiArrowDownOnSquare />
+          </IconButton>
+        )}
+        {status === "checked-in" && (
+          <IconButton
+            title="Check out"
+            disabled={isCheckingOut}
+            onClick={() => checkout(bookingId)}
+          >
+            <HiArrowUpOnSquare />
+          </IconButton>
+        )}
+        <IconButton
+          title="Delete"
+          disabled={isDeleting}
+          onClick={() => deleteBooking(bookingId)}
+        >
+          <HiOutlineTrash />
+        </IconButton>
+      </ActionGroup>
     </Table.Row>
   );
 }
