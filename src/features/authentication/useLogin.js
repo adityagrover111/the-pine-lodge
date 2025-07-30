@@ -13,7 +13,7 @@ export const useLogin = () => {
     onSuccess: (data) => {
       queryClient.setQueryData(["user"], data.user);
       toast.success("Welcome Aditya");
-      navigate("/dashboard");
+      navigate("/dashboard", { replace: "true" });
     },
 
     onError: (err) => {
