@@ -6,11 +6,10 @@ import { formatCurrency } from "../../utils/helpers";
 function Stats({ bookings, confirmedStays, numDays, cabinCount }) {
   const numBookings = bookings?.length;
 
-  const sales = bookings.reduce((acc, cur) => acc + cur.totalPrice, 0);
-  const checkins = confirmedStays?.length;
-
+  const sales = bookings?.reduce((acc, cur) => acc + cur.totalPrice, 0) || 0;
+  const checkins = confirmedStays?.length || 0;
   const occupation =
-    confirmedStays.reduce((acc, cur) => acc + cur.numNights, 0) /
+    (confirmedStays?.reduce((acc, cur) => acc + cur?.numNights, 0) || 0) /
     (numDays * cabinCount);
   return (
     <>
