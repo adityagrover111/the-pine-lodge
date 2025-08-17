@@ -17,15 +17,15 @@ const StyledDashboardLayout = styled.div`
 `;
 
 function DashboardLayout() {
-  const { bookings, isLoading } = useRecentBookings();
+  const { bookings = {}, isLoading } = useRecentBookings();
   const {
-    stays,
-    confirmedStays,
+    stays = {},
+    confirmedStays = {},
     isLoading: isLoading1,
     numDays,
   } = useRecentStays();
 
-  const { cabins, isLoading: isLoading3 } = useCabins();
+  const { cabins = {}, isLoading: isLoading3 } = useCabins();
   if (isLoading) return <Spinner />;
 
   return (

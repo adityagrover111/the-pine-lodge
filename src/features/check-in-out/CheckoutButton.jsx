@@ -3,7 +3,7 @@ import { useCheckout } from "./useCheckout";
 
 function CheckoutButton({ bookingId }) {
   const { checkout, isCheckingOut } = useCheckout();
-  console.log(bookingId);
+
   return (
     <Button
       variation="primary"

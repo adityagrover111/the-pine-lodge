@@ -139,10 +139,13 @@ function prepareData(startData, stays) {
   return data;
 }
 
-function DurationChart({ confirmedStays = [] }) {
+function DurationChart({ confirmedStays }) {
   const { isDarkMode } = useDarkMode();
   const startData = isDarkMode ? startDataDark : startDataLight;
-  const data = prepareData(startData, confirmedStays);
+  const safeConfirmedStays = Array.isArray(confirmedStays)
+    ? confirmedStays
+    : [];
+  const data = prepareData(startData, safeConfirmedStays);
 
   return (
     <ChartBox>
