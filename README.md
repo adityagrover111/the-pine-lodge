@@ -1,25 +1,20 @@
-Pine Lodge – Cabin Booking Management System
+# Pine Lodge – Cabin Booking Management System
 
-Pine Lodge is a responsive cabin booking management system built with React, Supabase, React Query, and Styled Components. It provides an end-to-end workflow for managing cabins, guests, and reservations for a fictional lodge.
+A full-stack booking management system for a fictional lodge. Built with **React**, **Supabase**, **React Query**, and **Styled Components**.  
 
-Features
+This project lets admins manage cabins, guests, and reservations with a clean dashboard, live data updates, and flexible workflows.
 
-Responsive admin dashboard for managing cabins, guests, and reservations
+## Features
 
-Supabase backend integration for database, authentication, and file storage
+- Dashboard to manage cabins, guests, and reservations  
+- Supabase backend for database, authentication, and file storage  
+- React Query for fetching, caching, and updating data  
+- Styled Components for maintainable, scoped styles  
+- Admin tools: check-in/out handling, analytics, filtering, and sorting  
 
-Secure API access with real-time data synchronization
+## Tech Stack
 
-React Query for efficient data fetching, caching, and mutations
-
-Styled Components for scoped, dynamic, and maintainable UI design
-
-Admin workflows for check-in/check-out handling, dashboard analytics, and flexible filtering/sorting
-
-Tech Stack
-
-Frontend: React, React Query, Styled Components
-
-Backend: Supabase (Database, Auth, Storage)
-
-Deployment: Vercel/Netlify (optional)
+- React  
+- Supabase  
+- React Query  
+- Styled Components  
